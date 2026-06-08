@@ -1,0 +1,178 @@
+:root {
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--vscode-font-family);
+  color: var(--vscode-foreground);
+  padding: 20px 16px;
+  --accent: #e05a47;
+}
+
+body.is-break {
+  --accent: #2ea043;
+}
+
+.pomodoro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.mode-pill {
+  font-size: 0.74em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 14px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--accent);
+  transition: background 0.3s ease;
+}
+
+/* ---------- Anel ---------- */
+
+.ring-wrap {
+  position: relative;
+  width: 200px;
+  max-width: 72vw;
+  aspect-ratio: 1 / 1;
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: var(--vscode-panel-border, rgba(128, 128, 128, 0.22));
+  stroke-width: 10;
+}
+
+.ring-fg {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s linear, stroke 0.3s ease;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.time {
+  font-size: 2.7em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--vscode-editor-font-family, monospace);
+  line-height: 1;
+}
+
+.cycles {
+  font-size: 0.76em;
+  letter-spacing: 0.04em;
+  color: var(--vscode-descriptionForeground);
+}
+
+/* ---------- Controles ---------- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 24px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 116px;
+  transition: filter 0.15s ease, background 0.3s ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--vscode-foreground);
+  border: 1px solid var(--vscode-panel-border, rgba(128, 128, 128, 0.3));
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 1.15em;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: var(--vscode-toolbar-hoverBackground, rgba(128, 128, 128, 0.2));
+}
+
+/* ---------- Configuração ---------- */
+
+.config {
+  display: flex;
+  gap: 16px;
+  margin-top: 2px;
+}
+
+.config label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vscode-descriptionForeground);
+}
+
+.config input {
+  width: 72px;
+  text-align: center;
+  font-size: 1.05em;
+  font-family: inherit;
+  color: var(--vscode-input-foreground);
+  background: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border, transparent);
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.config input:focus {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+
+/* Remove os spinners (mais/menos) do input numérico. */
+.config input::-webkit-inner-spin-button,
+.config input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.config input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

@@ -1,0 +1,102 @@
+{
+  "name": "wiboor-extension",
+  "displayName": "Wiboor",
+  "description": "Visualize e gerencie suas tarefas da Wiboor dentro do VSCode.",
+  "version": "0.0.1",
+  "publisher": "wiboor",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "wiboor",
+          "title": "Wiboor",
+          "icon": "media/wiboor.svg"
+        }
+      ]
+    },
+    "views": {
+      "wiboor": [
+        {
+          "id": "wiboor.tasksView",
+          "name": "Tarefas"
+        },
+        {
+          "id": "wiboor.taskDetail",
+          "name": "Detalhe",
+          "type": "webview"
+        },
+        {
+          "id": "wiboor.pomodoro",
+          "name": "Pomodoro",
+          "type": "webview"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "wiboor.tasksView",
+        "contents": "Para começar, configure a URL da API em Settings (wiboor.baseUrl) e defina sua API key.\n[Definir API Key](command:wiboor.setApiKey)\n[Atualizar](command:wiboor.refreshTasks)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "wiboor.setApiKey",
+        "title": "Definir API Key",
+        "category": "Wiboor"
+      },
+      {
+        "command": "wiboor.setUserId",
+        "title": "Definir User Executor ID",
+        "category": "Wiboor"
+      },
+      {
+        "command": "wiboor.clearApiKey",
+        "title": "Limpar API Key",
+        "category": "Wiboor"
+      },
+      {
+        "command": "wiboor.refreshTasks",
+        "title": "Atualizar Tarefas",
+        "category": "Wiboor",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "wiboor.refreshTasks",
+          "when": "view == wiboor.tasksView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Wiboor",
+      "properties": {
+        "wiboor.baseUrl": {
+          "type": "string",
+          "default": "https://api.azzimuti.com.br",
+          "markdownDescription": "Base URL da API Wiboor. Ex.: `https://api.azzimuti.com.br`"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.0"
+  }
+}
