@@ -37,12 +37,14 @@ export class WiboorClient {
 
     const apiKey = await this.getApiKey();
     if (!apiKey) {
+
       throw new WiboorApiError(
         'API key não configurada. Rode o comando "Wiboor: Definir API Key".'
       );
     }
 
     const url = `${baseUrl.replace(/\/+$/, "")}${path}`;
+
 
     let res: Response;
     try {

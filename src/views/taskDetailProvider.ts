@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { WiboorClient } from "../api/client";
+import { createOrCheckoutBranch } from "../git/branch";
 import { TasksTreeProvider } from "./tasksTreeProvider";
 
 const LAST_TASK_KEY = "wiboor.lastTaskId";
@@ -18,12 +19,7 @@ function getNonce(): string {
   return text;
 }
 
-/**
- * WebviewView que mostra o detalhe da tarefa selecionada e expõe as ações
- * (comentar, iniciar, pausar, finalizar). Os dados vêm da lista já carregada
- * (TasksTreeProvider). Persiste a última tarefa aberta em globalState para
- * restaurá-la automaticamente ao reabrir o painel.
- */
+
 export class TaskDetailProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "wiboor.taskDetail";
 
@@ -34,7 +30,7 @@ export class TaskDetailProvider implements vscode.WebviewViewProvider {
     private readonly context: vscode.ExtensionContext,
     private readonly client: WiboorClient,
     private readonly tasks: TasksTreeProvider
-  ) {}
+  ) { }
 
   resolveWebviewView(webviewView: vscode.WebviewView): void {
     this.view = webviewView;
@@ -45,14 +41,11 @@ export class TaskDetailProvider implements vscode.WebviewViewProvider {
     webviewView.webview.html = this.getHtml(webviewView.webview);
     webviewView.webview.onDidReceiveMessage((msg) => this.handleMessage(msg));
 
-    // Restaura o id da última tarefa aberta. O conteúdo só é enviado quando o
-    // webview avisa que está pronto (mensagem "ready"), evitando perder a
-    // mensagem por enviá-la antes do script registrar o listener.
     this.currentTaskId =
       this.context.globalState.get<string>(LAST_TASK_KEY) ?? undefined;
   }
 
-  /** Abre uma tarefa pelo id e a persiste como "última aberta". */
+
   async open(taskId: string): Promise<void> {
     this.currentTaskId = taskId;
     await this.context.globalState.update(LAST_TASK_KEY, taskId);
@@ -66,7 +59,7 @@ export class TaskDetailProvider implements vscode.WebviewViewProvider {
     await this.renderCurrent();
   }
 
-  /** Envia ao webview o estado atual (vazio, ou a tarefa selecionada). */
+
   private async renderCurrent(): Promise<void> {
     const id = this.currentTaskId;
     if (!id) {
@@ -78,7 +71,7 @@ export class TaskDetailProvider implements vscode.WebviewViewProvider {
 
     let task = this.tasks.getTaskById(id);
     if (!task) {
-      // Lista ainda não carregada (ex.: restauração após reload) — busca agora.
+
       await this.tasks.refresh();
       task = this.tasks.getTaskById(id);
     }
@@ -110,6 +103,12 @@ export class TaskDetailProvider implements vscode.WebviewViewProvider {
           `Wiboor: "${msg.text}" copiado`,
           2000
         );
+      }
+      return;
+    }
+    if (msg.type === "branch") {
+      if (msg.text) {
+        await createOrCheckoutBranch(msg.text);
       }
       return;
     }

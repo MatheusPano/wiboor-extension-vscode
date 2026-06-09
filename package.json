@@ -1,9 +1,10 @@
 {
-  "name": "wiboor-extension",
-  "displayName": "Wiboor",
+  "name": "wiboor-tasks",
+  "displayName": "Wiboor Tasks",
   "description": "Visualize e gerencie suas tarefas da Wiboor dentro do VSCode.",
-  "version": "0.0.1",
-  "publisher": "wiboor",
+  "version": "0.0.2",
+  "publisher": "matheus-pano",
+  "icon": "media/icon.png",
   "engines": {
     "vscode": "^1.90.0"
   },

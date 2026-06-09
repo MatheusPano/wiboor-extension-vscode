@@ -2,7 +2,7 @@
   const vscode = acquireVsCodeApi();
   const app = document.getElementById("app");
 
-  /** Escapa texto para inserção segura como HTML. */
+
   function esc(value) {
     return String(value ?? "")
       .replace(/&/g, "&amp;")
@@ -36,8 +36,8 @@
     const img = user.avatarUrl
       ? `<img class="avatar" src="${esc(user.avatarUrl)}" alt="" />`
       : `<span class="avatar avatar-fallback">${esc(
-          (user.name || "?").charAt(0)
-        )}</span>`;
+        (user.name || "?").charAt(0)
+      )}</span>`;
     return `<span class="person">${img}<span class="person-name">${esc(
       user.name || "—"
     )}</span></span>`;
@@ -137,16 +137,16 @@
       : [];
     const attachmentsHtml = attachments.length
       ? attachments
-          .map((a) =>
-            isImage(a.url)
-              ? `<a class="attachment" href="${esc(a.url)}" title="${esc(
-                  a.name
-                )}"><img src="${esc(a.url)}" alt="${esc(a.name)}" /></a>`
-              : `<a class="attachment-link" href="${esc(a.url)}">📎 ${esc(
-                  a.name
-                )}</a>`
-          )
-          .join("")
+        .map((a) =>
+          isImage(a.url)
+            ? `<a class="attachment" href="${esc(a.url)}" title="${esc(
+              a.name
+            )}"><img src="${esc(a.url)}" alt="${esc(a.name)}" /></a>`
+            : `<a class="attachment-link" href="${esc(a.url)}">📎 ${esc(
+              a.name
+            )}</a>`
+        )
+        .join("")
       : "";
 
     const checklist = Array.isArray(task.checklist) ? task.checklist : [];
@@ -154,18 +154,22 @@
 
     app.innerHTML = `
       <div class="header">
-        ${
-          ident
-            ? `<div class="ident">
+        ${ident
+        ? `<div class="ident">
                  <span class="ident-text">${esc(ident)}</span>
                  <button class="copy-btn" data-action="copy" data-copy="${esc(
-                   branch
-                 )}" title="Copiar branch: ${esc(
-                 branch
-               )}" aria-label="Copiar branch">⧉</button>
+          branch
+        )}" title="Copiar branch: ${esc(
+          branch
+        )}" aria-label="Copiar branch">⧉</button>
+                 <button class="copy-btn" data-action="branch" data-branch="${esc(
+          branch
+        )}" title="Criar/trocar para a branch: ${esc(
+          branch
+        )}" aria-label="Criar ou trocar de branch">Branch ⎇</button>
                </div>`
-            : "<span></span>"
-        }
+        : "<span></span>"
+      }
         <span class="status status-${esc(status)}">${esc(statusLabel)}</span>
       </div>
 
@@ -177,66 +181,59 @@
       </div>
 
       <div class="card">
-        ${
-          task.userRequester
-            ? `<div class="row">
+        ${task.userRequester
+        ? `<div class="row">
                  <span class="row-label">Solicitante</span>
                  <span class="row-value">${avatar(task.userRequester)}</span>
                </div>`
-            : ""
-        }
-        ${
-          task.project
-            ? `<div class="row">
+        : ""
+      }
+        ${task.project
+        ? `<div class="row">
                  <span class="row-label">Projeto</span>
-                 <span class="row-value">${esc(task.project.title)}${
-                task.project.project_number
-                  ? ` <span class="muted">#${esc(
-                      task.project.project_number
-                    )}</span>`
-                  : ""
-              }</span>
+                 <span class="row-value">${esc(task.project.title)}${task.project.project_number
+          ? ` <span class="muted">#${esc(
+            task.project.project_number
+          )}</span>`
+          : ""
+        }</span>
                </div>`
-            : ""
-        }
-        ${
-          hasPeriod
-            ? `<div class="row">
+        : ""
+      }
+        ${hasPeriod
+        ? `<div class="row">
                  <span class="row-label">Período</span>
                  <span class="row-value">${esc(fmtDate(task.startedAt))} <span class="muted">→</span> ${esc(
-                fmtDate(task.endedAt)
-              )}</span>
+          fmtDate(task.endedAt)
+        )}</span>
                </div>`
-            : ""
-        }
-        ${
-          priorityTag(task.priority)
-            ? `<div class="row">
+        : ""
+      }
+        ${priorityTag(task.priority)
+        ? `<div class="row">
                  <span class="row-label">Prioridade</span>
                  <span class="row-value">${priorityTag(task.priority)}</span>
                </div>`
-            : ""
-        }
+        : ""
+      }
       </div>
 
       ${actionsFor(status)}
 
-      ${
-        attachmentsHtml
-          ? `<div class="section">
+      ${attachmentsHtml
+        ? `<div class="section">
                <div class="section-title">Anexos</div>
                <div class="attachments">${attachmentsHtml}</div>
              </div>`
-          : ""
+        : ""
       }
 
-      ${
-        checklist.length
-          ? `<div class="section">
+      ${checklist.length
+        ? `<div class="section">
                <div class="section-title">Checklist</div>
                <div class="muted">${checklist.length} item(s)</div>
              </div>`
-          : ""
+        : ""
       }`;
 
     // Descrição vem como HTML da API; injetada à parte (o CSP impede execução
@@ -259,6 +256,12 @@
     if (action === "copy") {
       const text = btn.getAttribute("data-copy") || "";
       if (text) vscode.postMessage({ type: "copy", text });
+      return;
+    }
+
+    if (action === "branch") {
+      const text = btn.getAttribute("data-branch") || "";
+      if (text) vscode.postMessage({ type: "branch", text });
       return;
     }
 
