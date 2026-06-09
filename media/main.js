@@ -166,7 +166,7 @@
           branch
         )}" title="Criar/trocar para a branch: ${esc(
           branch
-        )}" aria-label="Criar ou trocar de branch">Branch ⎇</button>
+        )}" aria-label="Criar ou trocar de branch">⎇</button>
                </div>`
         : "<span></span>"
       }
